@@ -189,7 +189,7 @@ bool TagTreeModel::setData(const QModelIndex &index, const QVariant &value, int 
             const QString new_name = value.toString();
             if(tag_checker) {
                 if(tag_checker->check(new_name) == false) {
-                    QMessageBox.warning(nullptr, tr("Error!"), tag_checker->errorMsg(), QMessageBox.Ok);
+                    emit invalidValueSetted(tag_checker->errorMsg());
                     return false;
                 }
             }
@@ -210,7 +210,7 @@ bool TagTreeModel::setData(const QModelIndex &index, const QVariant &value, int 
                 const QString new_name = value.toString();
                 if(tag_checker) {
                     if(tag_checker->check(new_name) == false) {
-                        QMessageBox::warning(nullptr, tr("Error!"), tag_checker->errorMsg());
+                        emit invalidValueSetted(tag_checker->errorMsg());
                         return false;
                     }
                 }

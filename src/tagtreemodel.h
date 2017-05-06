@@ -75,6 +75,9 @@ public:
     void setTagChecker(AbstractTagValidCheckHelper *checker) {tag_checker = checker;}
     AbstractTagValidCheckHelper *getTagChecker() {return tag_checker;}
 
+signals:
+    void invalidValueSetted(QString message);
+
 private:
     TagItem *itemForIndex(const QModelIndex &index) const;
     QModelIndex indexForPath(const QModelIndex &parent,
