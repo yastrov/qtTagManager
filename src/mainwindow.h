@@ -13,6 +13,7 @@
 #include "store/tagstorehelperxml.h"
 #include "store/abstracttagstorehelper.h"
 #include "colorhelper/tagcolorhelper.h"
+#include "colorhelper/tagcolorhelperdefined.h"
 #include "validator/abstracttagvalidcheckhelper.h"
 #include "validator/tagvalidcheckhelper.h"
 #include "settingshelper.h"
@@ -55,7 +56,8 @@ protected:
 
 private:
     Ui::MainWindow *ui;
-    TagColorHelper color_helper;
+    //TagColorHelper color_helper;
+    TagColorHelperDefinedColors color_helper;
     TagValidCheckHelper tag_checker;
     QString lastUsedFileName;
     SettingsHelper _settingsHelper;
