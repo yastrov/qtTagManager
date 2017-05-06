@@ -8,6 +8,9 @@ TagColorHelper::TagColorHelper():
 
 void TagColorHelper::init(TagItem *root)
 {
+    _i_count = 0;
+    _colors_hash.clear();
+    _counter.clear();
     _walkOverNode(root);
 }
 
