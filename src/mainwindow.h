@@ -40,6 +40,7 @@ private slots:
     void on_about_qt_triggered(bool checked) {
         Q_UNUSED(checked)
         QMessageBox::aboutQt(this);}
+    void invalidValueSettedByUserToTreeViewModel(QString message);
     void on_about_triggered(bool checked);
     void on_load_file_clicked(bool checked);
     void on_save_file_clicked(bool checked);

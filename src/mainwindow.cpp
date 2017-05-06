@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     TagTreeModel *model = new TagTreeModel(this);
     model->setColorHelper(&color_helper);
     model->setTagChecker(&tag_checker);
+    connect(model, &TagTreeModel::invalidValueSetted, this, &MainWindow::invalidValueSettedByUserToTreeViewModel);
     TagItem *root = HELPER::createExampleTagTree();
     model->setRoot(root);
     ui->tagsTreeView->setModel(model);
@@ -75,6 +76,7 @@ void MainWindow::loadFile(const QString& filename)
         newModel->setColorHelper(&color_helper);
         newModel->setTagChecker(&tag_checker);
         newModel->setRoot(root);
+        connect(newModel, &TagTreeModel::invalidValueSetted, this, &MainWindow::invalidValueSettedByUserToTreeViewModel);
 
         QAbstractItemModel *model = ui->tagsTreeView->model();
         model->deleteLater();
@@ -129,6 +131,7 @@ void MainWindow::on_new_file_clicked(bool checked)
     newModel->setTagChecker(&tag_checker);
     TagItem *root = HELPER::createExampleTagTree();
     newModel->setRoot(root);
+    connect(newModel, &TagTreeModel::invalidValueSetted, this, &MainWindow::invalidValueSettedByUserToTreeViewModel);
     QAbstractItemModel *model = ui->tagsTreeView->model();
     model->deleteLater();
     ui->tagsTreeView->setModel(newModel);
@@ -223,4 +226,10 @@ void MainWindow::on_treeview_new_triggered(bool checked)
     if(model == nullptr) return;
     QModelIndex index = treeV->currentIndex();
     model->insertRow(0, index);
+}
+
+void MainWindow::invalidValueSettedByUserToTreeViewModel(QString message)
+{
+    // User set incorrect value
+    QMessageBox::warning(this, tr("Error!"), message, QMessageBox::Ok);
 }
