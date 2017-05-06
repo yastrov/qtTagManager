@@ -59,12 +59,12 @@ TRANSLATIONS += translations/qtagmanager_ru.ts
 
 VERSION = 0.0.0.1
 QMAKE_TARGET_COMPANY = OpenSource
-QMAKE_TARGET_PRODUCT = qTagManager
+QMAKE_TARGET_PRODUCT = qtTagManager
 QMAKE_TARGET_DESCRIPTION = "Tag manager"
 QMAKE_TARGET_COPYRIGHT = (c) Yuriy Astrov
 # RC_ICONS = myappico.ico
 # RC_FILE = myapp.rc
-GITHUB_URL = "https://github.com/yastrov/qTagManager"
+GITHUB_URL = "https://github.com/yastrov/qtTagManager"
 
 DEFINES += \
 APP_VERSION=\"\\\"$$VERSION\\\"\" \
