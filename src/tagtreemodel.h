@@ -10,7 +10,7 @@
 #include <QMessageBox>
 #include <QMimeData>
 #include "tagitem.h"
-#include "abstracttagcolorhelper.h"
+#include "colorhelper/abstracttagcolorhelper.h"
 #include "validator/abstracttagvalidcheckhelper.h"
 #include <QDebug>
 

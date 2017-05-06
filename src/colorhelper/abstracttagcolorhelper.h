@@ -2,7 +2,7 @@
 #define ABSTRACTTAGCOLORHELPER_H
 #include <QColor>
 #include <QString>
-#include "tagitem.h"
+#include "../tagitem.h"
 
 class AbstractTagColorHelper
 {

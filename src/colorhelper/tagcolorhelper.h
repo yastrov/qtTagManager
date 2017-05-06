@@ -4,7 +4,7 @@
 #include <QHash>
 #include <QList>
 #include <QColor>
-#include "tagitem.h"
+#include "../tagitem.h"
 #include "abstracttagcolorhelper.h"
 
 class TagColorHelper: public AbstractTagColorHelper

@@ -12,7 +12,7 @@
 #include "tagitem.h"
 #include "store/tagstorehelperxml.h"
 #include "store/abstracttagstorehelper.h"
-#include "tagcolorhelper.h"
+#include "colorhelper/tagcolorhelper.h"
 #include "validator/abstracttagvalidcheckhelper.h"
 #include "validator/tagvalidcheckhelper.h"
 #include "settingshelper.h"

@@ -35,7 +35,7 @@ SOURCES += src/main.cpp\
         src/mainwindow.cpp \
     src/tagitem.cpp \
     src/tagtreemodel.cpp \
-    src/tagcolorhelper.cpp \
+    src/colorhelper/tagcolorhelper.cpp \
     src/validator/tagvalidcheckhelper.cpp \
     src/store/abstracttagstorehelper.cpp \
     src/store/tagstorehelperxml.cpp \
@@ -44,14 +44,15 @@ SOURCES += src/main.cpp\
 HEADERS  += src/mainwindow.h \
     src/tagitem.h \
     src/tagtreemodel.h \
-    src/tagcolorhelper.h \
+    src/colorhelper/tagcolorhelper.h \
     src/abstracttagcolorhelper.h \
     src/validator/abstracttagvalidcheckhelper.h \
     src/validator/tagvalidcheckhelper.h \
     src/store/abstracttagstorehelper.h \
     src/store/tagstorehelperxml.h \
-    src/abstracttagcolorhelper.h \
+    src/colorhelper/abstracttagcolorhelper.h \
     src/settingshelper.h
+
 
 FORMS    += src/mainwindow.ui
 
