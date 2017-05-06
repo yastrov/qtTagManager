@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tagsTreeView->setModel(model);
 
     ui->tagsTreeView->setDragEnabled(true);
+    ui->tagsTreeView->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->tagsTreeView->setAcceptDrops(true);
     ui->tagsTreeView->setDropIndicatorShown(true);
     ui->tagsTreeView->setDragDropMode(QAbstractItemView::InternalMove);
@@ -194,7 +195,7 @@ void MainWindow::customContextMenuRequestedForTreeView(const QPoint &pos)
     QMenu *menu = new QMenu(this);
     QAction *removeAction = new QAction(tr("Remove"), this);
     connect(removeAction, &QAction::triggered, this, &MainWindow::on_treeview_remove_triggered);
-    QAction *newAction = new QAction(tr("Remove"), this);
+    QAction *newAction = new QAction(tr("Add new to current"), this);
     connect(newAction, &QAction::triggered, this, &MainWindow::on_treeview_new_triggered);
 
     menu->addAction(removeAction);
