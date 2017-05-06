@@ -2,6 +2,7 @@
 #define ABSTRACTTAGSTOREHELPER_H
 #include <QString>
 #include <QFile>
+#include <QFileInfo>
 #include <QDir>
 #include "../tagitem.h"
 

@@ -20,7 +20,8 @@ TagItem *AbstractTagStoreHelper::load()
         return nullptr;
     }
     QFile file(_fname);
-    if(!file.exists()) {
+    QFileInfo finfo(file);
+    if(!file.exists() && !finfo.isFile()) {
         _errorMsg = QObject::tr("File not exists!");
         _hasError = true;
         return nullptr;
