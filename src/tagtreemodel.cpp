@@ -146,20 +146,6 @@ QVariant TagTreeModel::data(const QModelIndex &index, int role) const
             return static_cast<int>(Qt::AlignVCenter|Qt::AlignRight);
         }
         break;
-    case Qt::SizeHintRole: {
-            QStyleOptionComboBox option;
-            switch (column) {
-                case Column::Name: option.currentText = item->name(); break;
-                default: Q_ASSERT(false);
-            }
-            QFontMetrics fontMetrics(data(index, Qt::FontRole)
-                                     .value<QFont>());
-            option.fontMetrics = fontMetrics;
-            QSize size(fontMetrics.width(option.currentText),
-                       fontMetrics.height());
-            return qApp->style()->sizeFromContents(QStyle::CT_ComboBox,
-                                                   &option, size);
-        }
     case Qt::BackgroundColorRole:
         if(color_helper)
             return color_helper->fetchColor(item->name());
