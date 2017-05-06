@@ -102,8 +102,7 @@ void MainWindow::on_load_file_clicked(bool checked)
                                                           tr("Open File"),
                                                  lastUsedFileName,
                                                  "XML files (*.xml)");
-    if(!fileName.isNull() && !fileName.isEmpty())
-                {
+    if(!fileName.isNull() && !fileName.isEmpty()) {
         lastUsedFileName = fileName;
         loadFile(fileName);
     }
@@ -116,10 +115,9 @@ void MainWindow::on_save_file_clicked(bool checked)
                                                           tr("Open File"),
                                                  lastUsedFileName,
                                                  "XML files (*.xml)");
-    if(!fileName.isNull() && !fileName.isEmpty())
-                {
+    if(!fileName.isNull() && !fileName.isEmpty()) {
         lastUsedFileName = fileName;
-    saveFile(fileName);
+        saveFile(fileName);
     }
 }
 
