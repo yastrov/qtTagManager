@@ -43,7 +43,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::on_load_file_clicked);
     connect(ui->actionSave, &QAction::triggered, this, &MainWindow::on_save_file_clicked);
     loadSettings();
-    loadFile(lastUsedFileName);
+    QFile file(lastUsedFileName);
+    if(file.exists() && QFileInfo(file).isFile())
+        loadFile(lastUsedFileName);
 }
 
 MainWindow::~MainWindow()
