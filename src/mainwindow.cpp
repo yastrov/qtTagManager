@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionSetFont, &QAction::triggered, this, &MainWindow::on_set_font_triggered);
     connect(ui->tagsTreeView, &QTreeView::customContextMenuRequested, this, &MainWindow::customContextMenuRequestedForTreeView);
     connect(ui->pushButton_AddNew, &QPushButton::clicked, this, &MainWindow::on_treeview_new_triggered);
+    connect(ui->pushButton_AddNewToRoot, &QPushButton::clicked, this, &MainWindow::on_treeview_new_to_root_triggered);
     connect(ui->pushButton_Remove, &QPushButton::clicked, this, &MainWindow::on_treeview_remove_triggered);
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::on_load_file_clicked);
     connect(ui->actionSave, &QAction::triggered, this, &MainWindow::on_save_file_clicked);
@@ -197,7 +198,8 @@ void MainWindow::customContextMenuRequestedForTreeView(const QPoint &pos)
     connect(removeAction, &QAction::triggered, this, &MainWindow::on_treeview_remove_triggered);
     QAction *newAction = new QAction(tr("Add new to current"), this);
     connect(newAction, &QAction::triggered, this, &MainWindow::on_treeview_new_triggered);
-
+    QAction *newToRootAction = new QAction(tr("Add new to root"), this);
+    connect(newToRootAction, &QAction::triggered, this, &MainWindow::on_treeview_new_to_root_triggered);
     menu->addAction(removeAction);
     menu->addAction(newAction);
     menu->popup(ui->tagsTreeView->viewport()->mapToGlobal(pos));
@@ -217,6 +219,12 @@ void MainWindow::on_treeview_remove_triggered(bool checked)
         model->removeRow();
     }
     */
+}
+
+void MainWindow::on_treeview_new_to_root_triggered(bool checked)
+{
+    QAbstractItemModel *model = ui->tagsTreeView->model();
+    model->insertRow(0, QModelIndex());
 }
 
 void MainWindow::on_treeview_new_triggered(bool checked)

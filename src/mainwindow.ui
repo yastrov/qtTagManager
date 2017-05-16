@@ -26,6 +26,13 @@
      </widget>
     </item>
     <item>
+     <widget class="QPushButton" name="pushButton_AddNewToRoot">
+      <property name="text">
+       <string>Add New elenemt to tree root</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QPushButton" name="pushButton_Remove">
       <property name="text">
        <string>Remove</string>

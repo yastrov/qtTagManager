@@ -50,6 +50,7 @@ private slots:
     void customContextMenuRequestedForTreeView(const QPoint &pos);
     void on_treeview_remove_triggered(bool checked);
     void on_treeview_new_triggered(bool checked);
+    void on_treeview_new_to_root_triggered(bool checked);
 
 protected:
     void closeEvent(QCloseEvent *event) override;
