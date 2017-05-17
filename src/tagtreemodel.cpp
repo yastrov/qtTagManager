@@ -240,8 +240,7 @@ bool TagTreeModel::insertRows(int row, int count,
     qDebug()<<"TagTreeModel::insertRows";
     if (!rootItem)
         rootItem = new TagItem;
-    TagItem *parentItem = parent.isValid() ? itemForIndex(parent)
-                                            : rootItem;
+    TagItem *parentItem = itemForIndex(parent);
     TagItem *item;
     beginInsertRows(parent, row, row + count - 1);
     for (int i = 0; i < count; ++i) {
@@ -264,8 +263,7 @@ bool TagTreeModel::removeRows(int row, int count,
 {
     if (!rootItem)
         return false;
-    TagItem *item = parent.isValid() ? itemForIndex(parent)
-                                      : rootItem;
+    TagItem *item = itemForIndex(parent);
     beginRemoveRows(parent, row, row + count - 1);
     for (int i = 0; i < count; ++i)
         delete item->takeChild(row);
@@ -416,9 +414,11 @@ QModelIndex TagTreeModel::indexForPath(const QModelIndex &parent,
 {
     if (path.isEmpty())
         return QModelIndex();
-    for (int row = 0; row < rowCount(parent); ++row) {
+    const int _row_count = rowCount(parent);
+    const QString _path_0 = path.at(0);
+    for (int row = 0; row < _row_count; ++row) {
         QModelIndex thisIndex = index(row, 0, parent);
-        if (data(thisIndex).toString() == path.at(0)) {
+        if (data(thisIndex).toString() == _path_0) {
             if (path.count() == 1)
                 return thisIndex;
             thisIndex = indexForPath(thisIndex, path.mid(1));
