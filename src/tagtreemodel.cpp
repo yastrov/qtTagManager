@@ -221,7 +221,7 @@ Qt::ItemFlags TagTreeModel::flags(const QModelIndex &index) const
 {
     qDebug()<<"TagTreeModel::flags";
     Qt::ItemFlags theFlags = QAbstractItemModel::flags(index);
-    if (index.isValid())
+    //if (index.isValid()) // It check make Drag and Drop to invisible root disable.
     theFlags |= Qt::ItemIsSelectable|Qt::ItemIsEnabled|Qt::ItemIsEditable|
                 Qt::ItemIsDragEnabled|Qt::ItemIsDropEnabled;
     return theFlags;
