@@ -42,6 +42,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_AddNew, &QPushButton::clicked, this, &MainWindow::on_treeview_new_triggered);
     connect(ui->pushButton_AddNewToRoot, &QPushButton::clicked, this, &MainWindow::on_treeview_new_to_root_triggered);
     connect(ui->pushButton_Remove, &QPushButton::clicked, this, &MainWindow::on_treeview_remove_triggered);
+    connect(ui->pushButton_Up, &QPushButton::clicked, this, &MainWindow::on_treeview_up_triggered);
+    connect(ui->pushButton_Down, &QPushButton::clicked, this, &MainWindow::on_treeview_down_triggered);
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::on_load_file_clicked);
     connect(ui->actionSave, &QAction::triggered, this, &MainWindow::on_save_file_clicked);
     loadSettings();
@@ -236,6 +238,34 @@ void MainWindow::on_treeview_new_triggered(bool checked)
     QModelIndex index = treeV->currentIndex();
     model->insertRow(0, index);
 }
+
+void MainWindow::on_treeview_up_triggered(bool checked)
+{
+    Q_UNUSED(checked)
+    const QTreeView *treeV = ui->tagsTreeView;
+    QAbstractItemModel *model = treeV->model();
+    if(model == nullptr) return;
+    const QModelIndex index = treeV->currentIndex();
+    if(!index.isValid()) return;
+    const int index_row = index.row();
+    const QModelIndex parent = index.parent();
+    if(index_row < 1) return;
+    model->moveRow(parent, index_row, parent, index_row-1);
+}
+
+void MainWindow::on_treeview_down_triggered(bool checked)
+{
+    Q_UNUSED(checked)
+    const QTreeView *treeV = ui->tagsTreeView;
+    QAbstractItemModel *model = treeV->model();
+    if(model == nullptr) return;
+    const QModelIndex index = treeV->currentIndex();
+    if(!index.isValid()) return;
+    const int index_row = index.row();
+    const QModelIndex parent = index.parent();
+    model->moveRow(parent, index_row, parent, index_row+1);
+}
+
 
 void MainWindow::invalidValueSettedByUserToTreeViewModel(QString message)
 {

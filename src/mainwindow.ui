@@ -39,6 +39,20 @@
       </property>
      </widget>
     </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_Up">
+      <property name="text">
+       <string>Up</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_Down">
+      <property name="text">
+       <string>Down</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">

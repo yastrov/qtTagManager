@@ -103,7 +103,6 @@ int TagTreeModel::columnCount(const QModelIndex &parent) const
 
 QVariant TagTreeModel::data(const QModelIndex &index, int role) const
 {
-    qDebug()<<"TagTreeModel::data";
     if (!index.isValid())
         return QVariant();
     const int column = index.column();
@@ -219,7 +218,6 @@ bool TagTreeModel::setData(const QModelIndex &index, const QVariant &value, int 
 
 Qt::ItemFlags TagTreeModel::flags(const QModelIndex &index) const
 {
-    qDebug()<<"TagTreeModel::flags";
     Qt::ItemFlags theFlags = QAbstractItemModel::flags(index);
     //if (index.isValid()) // It check make Drag and Drop to invisible root disable.
     theFlags |= Qt::ItemIsSelectable|Qt::ItemIsEnabled|Qt::ItemIsEditable|
@@ -273,7 +271,6 @@ bool TagTreeModel::removeRows(int row, int count,
 
 bool TagTreeModel::moveRow(const QModelIndex &sourceParent, int sourceRow, const QModelIndex &destinationParent, int destinationChild)
 {
-    qDebug()<<"TagTreeModel::moveRow";
     return moveRows(sourceParent, sourceRow, 1, destinationParent, destinationChild);
 }
 
@@ -345,6 +342,7 @@ bool TagTreeModel::dropMimeData(const QMimeData *mimeData,
         const QModelIndex &parent)
 {
     qDebug()<<"TagTreeModel::dropMimeData";
+    qDebug() << "row: " << row << " col " << column << " par "<<parent;
     if (action == Qt::IgnoreAction)
         return true;
     if (action != Qt::MoveAction || column > 0 ||
