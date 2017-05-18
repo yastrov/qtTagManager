@@ -284,8 +284,29 @@ bool TagTreeModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int 
         return false;
     TagItem *s_p_item = static_cast<TagItem*>(sourceParent.internalPointer());
     TagItem *d_p_item = static_cast<TagItem*>(destinationParent.internalPointer());
+    if(s_p_item == d_p_item && count == 1) {
+        if(sourceRow > destinationChild) {
+        // See https://bugreports.qt.io/browse/QTBUG-6940
+        if(!beginMoveRows(sourceParent, sourceRow, sourceRow+count-1, destinationParent, destinationChild))
+            return false;
+        bool flag = s_p_item->moveChild(sourceRow, destinationChild);
+        endMoveRows();
+        return flag;
+        }
+        // Because Qt bug :(. with endMoveRows, indexes and qstack.
+        if(sourceRow < destinationChild) {
+            QList<QPersistentModelIndex> parents;
+            parents << QPersistentModelIndex(sourceParent);
+            emit layoutAboutToBeChanged(parents);
+            bool flag = s_p_item->moveChild(sourceRow, destinationChild);
+            //changePersistentIndex(sourceParent, destinationParent);
+            emit layoutChanged(parents);
+            return flag;
+        }
+    }
     TagItem *item;
-    beginMoveRows(sourceParent, sourceRow, sourceRow+count-1, destinationParent, destinationChild);
+    if(!beginMoveRows(sourceParent, sourceRow, sourceRow+count-1, destinationParent, destinationChild))
+        return false;
     for(int i=0; i<count; ++i) {
         item = s_p_item->childAt(sourceRow);
         d_p_item->insertChild(destinationChild+i, item);
