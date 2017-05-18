@@ -2,6 +2,9 @@
 #define TAGITEM_H
 #include <QString>
 #include <QObject>
+#ifdef MYPREFIX_DEBUG
+#include <QDebug>
+#endif
 
 class TagItem
 {
@@ -27,10 +30,17 @@ public:
     void swapChildren(int oldRow, int newRow)
                     { m_children.swap(oldRow, newRow); }
     TagItem* takeChild(int row);
+    bool moveChild(int from, int to);
+
 private:
     QString m_name;
     TagItem *m_parent;
     QList<TagItem*> m_children;
 };
+
+#ifdef MYPREFIX_DEBUG
+QDebug operator <<(QDebug debug, const TagItem& object);
+QDebug operator <<(QDebug debug, TagItem* object);
+#endif
 
 #endif // TAGITEM_H
