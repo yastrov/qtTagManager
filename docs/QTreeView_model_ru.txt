@@ -1,0 +1,144 @@
+TreeView Model (древовидная иерархическая модель для отображения в QTreeView).
+
+Некоторые заметки, которые, надеюсь, помогут лучше понять новичку в програмировании и Qt создание и работу
+QTreeView и отделить дополнительную функциональность от основной.
+
+Qt использует подход (паттерн) Model - View
+Основные компоненты:
+View (представление) - отображает информацию и реагирует на действия пользователя.
+Model (модель) - хранит информацию (наши данные).
+Есть ещё delegate (делегат) - позволяет показывать данные в виде конкретного виджета (кнопки, индикатора выполнения, календаря, выпадающего списка...)
+
+При действиях пользователя или для отображения на экране View будет вызывать публичные (общедоступные) функции из модели, а модель сообщает представлению с помощью специальных функция и сигналов, что данные были изменены.
+
+Обращение к элементам модели происходит с помощью объектов класса QModelIndex.
+Самые его полезные функции:
+int column() const - номер столбца (для "дерева" имеет второстепенное значение)
+int row() const    - номер строки
+void * internalPointer() const - указатель на текущий (current) элемент
+data(int role = Qt::DisplayRole) const - позволяет получить данные для роли
+QModelIndex parent() const - вернёт индекс элемента, в который текущий вложен.
+
+Модель создаётся на основе QAbstractItemModel.
+"Дерево" собирается из типовых элементов, которые вкладываются друг в друга (аналогично математическому дереву, графу, или генеалогическому древу:), можно сказать "ссылаются друг на друга" ). Каждый из этих элементов имеет информацию о элементе "над" ним (parent), и вложенных в него.
+В примере ниже, типовые элементы, описывающие узлы "дерева" имеют класс TreeItem.
+
+Советую посмотреть ссылки:
+http://doc.qt.io/qt-5/model-view-programming.html
+http://doc.qt.io/qt-5/modelview.html
+Там написаны хорошие вещи, и что важнее, даны наглядные иллюстрации.
+
+Пример:
+http://doc.qt.io/qt-5/qtwidgets-itemviews-editabletreemodel-example.html - Официальный пример редактируемой модели (так же содержит иллюстрации, исходники так же можно найти в папке установки Qt или в разделе "Примеры" главного окна Qt Creator).
+
+! Стоит обратить внимание на один важный момент:
+Для всех моделей считается, что наверху находится корневой невидимый элемент, относительно которого даются все индексы, так же нумерация строк и столбцов.
+Только при работе с моделями для списков и таблиц это проходит незаметно, тогда как для Tree Model это важно.
+
+Самые главные функции (именно от их корретности будет зависеть, заработает ли модель вообще), фрагмент определения класса:
+
+class TaskTreeModel : public QAbstractItemModel
+{
+    Q_OBJECT
+
+public:
+    explicit TaskTreeModel(QObject *parent = nullptr);
+    virtual ~TaskTreeModel(); // виртуальный деструктор
+
+    // Заголовок (оризонтальный и вертикальный):
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+
+    // Основная функциональность:
+    // Создаём индекс
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+    // Получить индекс элемента, находящегося "выше" текущего index
+    QModelIndex parent(const QModelIndex &index) const override;
+    // Получить информацию о элементах, "вложенных" в parent ("находящихся ниже").
+    // (Кол-во строк = кол-во элементов.)
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+
+    // Чтобы можно было редактировать данные:
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
+    // Сообщает с помощью флагов Qt::ItemFlags, что можно делать с элементом (редактировать, выделять мышкой и т.п.)
+    Qt::ItemFlags flags(const QModelIndex& index) const override;
+
+private:
+    TreeItem *rootItem; // Корневой невидимый элемент с данными.
+    // TreeItem *itemForIndex(const QModelIndex &index) const;
+}
+
+Примечания по С++:
+1) override - ключевое слово C++11, сообщающее программисту и компилятору "сейчас мы переопределим виртуальную функцию базового класса"
+Q_DECL_OVERRIDE - его синоним для Qt (и если компилятор не поддерживает override, Q_DECL_OVERRIDE будет выброшен)
+
+2) Можно ошибиться, забыв сделать деструктор класса virtual, так что лучше его сделать виртуальным.
+
+3) const - показывает, что вызов функции не меняет внутреннего состояния (т.е. переменных) класса.
+
+4) Указание explicit перед конструктором можно воспринимать "конструктор задан явно, при попытке создать объект класса с другими параметрами, будет сгенерирована ошибка". Без него компилятор может по своему усмотрению импровизировать с типами аргументов и выборе наиболее подходящего по его мнению конструктора (если их несколько).
+
+Уточнение по Qt:
+1) Стоит внимательно читать документацию на QAbstractItemModel: в части функций QModelIndex
+"указывает" на текущий элемент (и имеет имя переменной "index"), с которым мы работаем.
+В других функциях QModelIndex указывает на родительский элемент (parent) (и имеет имя переменной "parent"), а row и column всегда указывают на текущий.
+*Меня это в первое время сильно путало.*
+
+2) Если мы в функции получаем некорректный index, скорее всего это значит попытку обратиться
+к корневому элементу. И это надо учитывать в большинстве функций модели.
+Полезной будет функция-помошник, возвращающая указатель на элемент (класса TreeItem) по его индексу:
+
+TreeItem *TaskTreeModel::itemForIndex(const QModelIndex &index) const
+{
+    if (index.isValid()) {
+        TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
+        if (item) {
+            return item;
+        }
+    }
+    return rootItem;
+}
+
+Благодаря ей мы всегда работаем или с текущим элементом, или с корневым.
+
+Пример вставки строки:
+bool TaskTreeModel::insertRow(int row, const QModelIndex &parent)
+{
+    return insertRows(row, 1, parent);
+}
+
+bool TaskTreeModel::insertRows(int row, int count,
+                               const QModelIndex &parent)
+{
+    if (!rootItem)
+        rootItem = new TreeItem;
+    TreeItem *parentItem = itemForIndex(parent);
+    TreeItem *item;
+    beginInsertRows(parent, row, row + count - 1);
+    for (int i = 0; i < count; ++i) {
+        item = new TreeItem(tr("New Tag"));
+        parentItem->insertChild(row, item);
+    }
+    endInsertRows();
+    return true;
+}
+
+3) Родитель (parent) для корневого (невидимого) элемента - некорректный (invalid) QModelIndex.
+Поэтому чтобы добавить строку в самый корневой, невидимый элемент, нужно вызвать, например:
+model->insertRow(0, QModelIndex());
+Это добавит элемент на 0 позицию корневого элемента.
+
+4) Чтобы подгружать данные асинхронно (по требованию, необходимости), нужно будет реализовать (перегрузить)
+QAbstractItemModel::canFetchMore() и QAbstractItemModel::fetchMore(), возможно обратить внимание на QAbstractItemModel::hasChildren().
+
+P.S.
+Если нужно добавить Drag&Drop, достаточно только реализовать функции модели (mimeTypes(), mimeData, dropMimeData, supportedDragActions, supportedDropActions), само представление (QTreeView) уже имеет нужный базовый функционал! 
+Который включается:
+QTreeView *TreeView = ...
+TreeView->setDragEnabled(true);
+TreeView->setAcceptDrops(true);
+TreeView->setDropIndicatorShown(true);
+// Ограничить "только в пределах этого представления и этой модели" (есть и другие режимы):
+TreeView->setDragDropMode(QAbstractItemView::InternalMove);
